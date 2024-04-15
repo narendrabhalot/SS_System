@@ -40,11 +40,11 @@ const createUser = async (req, res) => {
 
 const userLogin = async (req, res) => {
     try {
-        const { userId, password } = req.body;
-        if (!userId || !password) {
-            return res.status(401).send({ status: false, msg: "userId or password required" });
+        const { emailId, password } = req.body;
+        if (!emailId || !password) {
+            return res.status(401).send({ status: false, msg: "Email id  or password required" });
         }
-        const user = await signUpModel.findOne({ userId, password }).exec();
+        const user = await signUpModel.findOne({ emailId, password }).exec();
         if (!user) {
             return res.status(401).send({ status: false, msg: "Incorrect userId or password" });
         }
