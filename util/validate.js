@@ -24,8 +24,8 @@ const userInfoValidation = (data) => {
             'any.required': "user mobile Number is required",
         }),
         password: Joi.string().trim().required().messages({
-            'any.required': "User password  is required",
-        })
+            'any.required': "user password  is required",
+        }),
     });
     return userSchema.validate(data);
 };
