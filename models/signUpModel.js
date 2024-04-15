@@ -1,7 +1,7 @@
 const { object, string } = require('joi');
 const mongoose = require('mongoose');
 const registrationSchema = new mongoose.Schema({
-    userId: {
+    emailId: {
         type: String,
         required: true,
         trim: true,

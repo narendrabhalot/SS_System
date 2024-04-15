@@ -13,7 +13,7 @@ const createUser = async (req, res) => {
             });
         }
         // 2. Check for Existing User with Mobile Number (Unique)
-        const existingUser = await signUpModel.findOne({ userId });
+        const existingUser = await signUpModel.findOne({ emailId });
         if (existingUser) {
             return res.status(400).send({
                 status: false,

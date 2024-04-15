@@ -1,8 +1,8 @@
 const Joi = require('joi');
 const userValidation = (data) => {
     const userSchema = Joi.object({
-        userId: Joi.string().trim().required().messages({
-            'any.required': "userId is required",
+        emailId: Joi.string().trim().required().messages({
+            'any.required': " emailId is required",
         }),
         password: Joi.string().trim().required().messages({
             'any.required': "User password  is required",
