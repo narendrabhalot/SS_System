@@ -20,7 +20,7 @@ const userInfoValidation = (data) => {
         userName: Joi.string().trim().required().messages({
             'any.required': "User Name is required",
         }),
-        userMobile: Joi.string().trim().required().messages({
+        mobileNumber: Joi.string().trim().required().messages({
             'any.required': "user mobile Number is required",
         }),
         password: Joi.string().trim().required().messages({
