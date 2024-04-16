@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const mongoose= require('mongoose')
 const userValidation = (data) => {
     const userSchema = Joi.object({
         emailId: Joi.string().trim().required().messages({

@@ -1,55 +1,37 @@
 const jwt = require("jsonwebtoken");
-const { isValidObjectId } = require("../validators/validator");
+const { isValidObjectId } = require("../util/validate");
 const userModel = require("../models/signUpModel");
 
 //=========================================== authentication ===========================================================================================
 
-const authentication = async function (req, res, next) {
+const authentication = function (req, res, next) {
     try {
-        let token = req.headers.authorization;
-
-        // if no token found
+        let token = req.headers["x-auth-key"];
         if (!token) {
-            return res.status(400).send({
-                status: false,
-                message: "Token required! Please login to generate token",
-            });
+            return res.status(400).send({ status: false, msg: "token is required" });
         }
 
-        // This👇 is written here to avoid internal server error (if token is not present)
-        token = token.split(" ")[1];
-
-        jwt.verify(
-            token,
-            process.env.JWT_SECRET,
-            function (error, decodedToken) {
-                // if token is invalid
-                if (error) {
-                    return res.status(401).send({
-                        status: false,
-                        message: "Token is invalid",
-                    });
-                }
-
-
+        jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
+            if (error) {
+                console.error('JWT verification error:', error);
+                return res.status(401).send({ status: false, msg: "Invalid token" });
+            } else {
+                console.log('Decoded token:', decodedToken);
+                req.userId = decodedToken.userId;
             }
-        );
-        next()
-    } catch (err) {
-        res.status(500).send({
-            status: false,
-            message: "Internal Server Error",
-            error: err.message,
         });
+        next();
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send({ status: false, msg: error.message });
     }
-};
+}
 
 //=========================================== authorisation ============================================================================================
 
 const authorisation = async function (req, res, next) {
     try {
         let userId = req.params.userId;
-
 
         if (!isValidObjectId(userId)) {
             res
