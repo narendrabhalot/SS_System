@@ -1,4 +1,5 @@
 const signUpModel = require('../models/signUpModel')
+const { otpValidation } = require('../util/validate')
 const { sendEmail } = require('../util/sendEmail')
 function generateOTP() {
     const digits = '0123456789';
@@ -42,4 +43,29 @@ const forgetPassword = async (req, res) => {
         });
     }
 };
-module.exports = { forgetPassword }
+
+
+const verifyOTP = async (req, res) => {
+    const { otp } = req.body;
+    try {
+        const value = await otpValidation(req.body);
+        if (value.error) {
+            return res.status(400).send({
+                status: false,
+                msg: value.error.message
+            });
+        }
+        const user = await UserModel.findOne({ otp: otp });
+        if (!user) {
+            return res.status(401).json({ status: false, message: 'Invalid OTP' });
+        }
+        user.otp = undefined;
+        await user.save();
+
+        res.status(200).send({ status: true, message: 'OTP verification successful', data: user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ status: false, message: 'Error verifying OTP' });
+    }
+};
+module.exports = { forgetPassword, verifyOTP }

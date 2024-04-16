@@ -1,5 +1,5 @@
 const Joi = require('joi');
-const mongoose= require('mongoose')
+const mongoose = require('mongoose')
 const userValidation = (data) => {
     const userSchema = Joi.object({
         emailId: Joi.string().trim().required().messages({
@@ -32,5 +32,14 @@ const userInfoValidation = (data) => {
 const isValidObjectId = function (objectId) {
     return mongoose.Types.ObjectId.isValid(objectId);
 };
-
-module.exports = { userValidation, isValidObjectId, userInfoValidation }
+const otpValidation = (data) => {
+    const otpSchema = Joi.object({
+        otp: Joi.string().trim().min(6).max(6).required().messages({
+            'any.required': "otp is required",
+            "string.min": " otp length must be less than or equal to 6 characters long",
+            "string.max": " otp length must be less than or equal to 6 characters long",
+        }),
+    })
+    return otpSchema.validate(data)
+}
+module.exports = { userValidation, isValidObjectId, userInfoValidation ,otpValidation}
