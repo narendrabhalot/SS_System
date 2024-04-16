@@ -11,9 +11,12 @@ function generateOTP() {
 const forgetPassword = async (req, res) => {
     try {
         const { emailId } = req.body;
-
-
-
+        if (!emailId) {
+            return res.status(400).send({
+                status: false,
+                msg: "Email id required ",
+            })
+        }
         const existingUser = await signUpModel.findOne({ emailId: emailId });
         if (!existingUser) {
             return res.status(404).send({
@@ -22,16 +25,14 @@ const forgetPassword = async (req, res) => {
             });
         }
         let otp = generateOTP();
+        existingUser.otp = otp
         otp = `ss system otp : ${otp}`
-        existingUser.otp = { value: otp, Date: new Date() };
         await existingUser.save();
-
         await sendEmail(emailId, "otp", otp);
         // 4. Send Successful Response with User Data
         return res.status(200).send({
             status: true,
-            msg: 'Email send successfully',
-
+            msg: `OTP  send successfully on this ${emailId} `,
         });
     } catch (error) {
         console.error(error); // Log the error for debugging
@@ -41,5 +42,4 @@ const forgetPassword = async (req, res) => {
         });
     }
 };
-
 module.exports = { forgetPassword }

@@ -8,7 +8,6 @@ const userValidation = (data) => {
             'any.required': "User password  is required",
         }),
         otp: Joi.string().trim().optional()
-
     });
     return userSchema.validate(data);
 };
@@ -30,7 +29,7 @@ const userInfoValidation = (data) => {
     return userSchema.validate(data);
 };
 const isValidObjectId = function (objectId) {
-    return mongoose.Types.ObjectId.isValid(objectId); // returns a boolean
+    return mongoose.Types.ObjectId.isValid(objectId);
 };
 
 module.exports = { userValidation, isValidObjectId, userInfoValidation }

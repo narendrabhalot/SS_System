@@ -2,6 +2,8 @@ const { userValidation } = require('../util/validate')
 const jwt = require('jsonwebtoken')
 const signUpModel = require('../models/signUpModel')
 
+
+
 const createUser = async (req, res) => {
     try {
         const { emailId, password } = req.body;
@@ -12,21 +14,28 @@ const createUser = async (req, res) => {
                 msg: validationResult.error.message,
             });
         }
-        // 2. Check for Existing User with Mobile Number (Unique)
+
+        // Check for Existing User with Email (Unique)
         const existingUser = await signUpModel.findOne({ emailId });
         if (existingUser) {
             return res.status(400).send({
                 status: false,
-                msg: "user is already registered.",
+                msg: "User is already registered.",
             });
         }
-        // 3. Create New User
-        const user = await signUpModel.create(req.body);
-        // 4. Send Successful Response with User Data
+
+        // Create New User
+        const newUser = await signUpModel.create(req.body);
+
+        // Generate Token
+        const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, );
+
+        // Send Successful Response with Token and User Data
         return res.status(201).send({
             status: true,
             msg: 'User signup successful!',
-            data: user,
+            token: token,
+            data: newUser,
         });
     } catch (error) {
         console.error(error); // Log the error for debugging
@@ -36,7 +45,6 @@ const createUser = async (req, res) => {
         });
     }
 };
-
 
 const userLogin = async (req, res) => {
     try {
@@ -49,7 +57,12 @@ const userLogin = async (req, res) => {
             return res.status(401).send({ status: false, msg: "Incorrect userId or password" });
         }
         const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET);
-        return res.status(200).send({ status: true, message: "User logIn successfully ", token });
+        return res.status(201).send({
+            status: true,
+            msg: 'User login  successfully!',
+            token: token,
+            data: user,
+        });
     } catch (error) {
         console.error(error); // Log the error for debugging
         return res.status(500).send({ status: false, msg: "Error logging in" });
