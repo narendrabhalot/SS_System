@@ -54,7 +54,7 @@ const userLogin = async (req, res) => {
         }
         const user = await signUpModel.findOne({ emailId, password }).exec();
         if (!user) {
-            return res.status(401).send({ status: false, msg: "Incorrect userId or password" });
+            return res.status(401).send({ status: false, msg: "Incorrect emailId or password" });
         }
         const token = jwt.sign({ userId: user._id.toString() }, process.env.JWT_SECRET);
         return res.status(201).send({
@@ -78,12 +78,6 @@ const updateUserPassword = async (req, res) => {
         if (!isValidObjectId(userId)) {
             return res.status(400).send({ status: false, msg: "Invalid object Id" });
         }
-
-        // Check if userId matches the userId from the token (if you're using authentication middleware)
-        if (userId !== req.userId) {
-            return res.status(401).send({ status: false, msg: "Invalid user" });
-        }
-
         try {
             // Update the user's password and exclude 'otp' field from the updated document
             const updatedUser = await signUpModel.findOneAndUpdate(
@@ -91,7 +85,6 @@ const updateUserPassword = async (req, res) => {
                 { $set: { password }, $unset: { otp: "" } },
                 { new: true, upsert: true }
             );
-
             // Check if the user was found
             if (!updatedUser) {
                 return res.status(400).send({ status: false, msg: "User update failed" });
