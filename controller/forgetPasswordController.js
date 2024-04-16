@@ -32,7 +32,7 @@ const forgetPassword = async (req, res) => {
         // 4. Send Successful Response with User Data
         return res.status(200).send({
             status: true,
-            msg: `OTP  send successfully on this ${emailId} `,
+            msg: `OTP send successfully on this email ${emailId} `,
         });
     } catch (error) {
         console.error(error); // Log the error for debugging

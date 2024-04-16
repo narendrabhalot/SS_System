@@ -8,7 +8,7 @@ const authentication = function (req, res, next) {
     try {
         let token = req.headers["x-auth-key"];
         if (!token) {
-            return res.status(400).send({ status: false, msg: "token is required" });
+            return res.status(400).send({ status: false, msg: "Token is required" });
         }
 
         jwt.verify(token, process.env.JWT_SECRET, (error, decodedToken) => {
@@ -18,14 +18,15 @@ const authentication = function (req, res, next) {
             } else {
                 console.log('Decoded token:', decodedToken);
                 req.userId = decodedToken.userId;
+                next(); // Call next() inside the callback to ensure it's called after token verification
             }
         });
-        next();
     } catch (error) {
         console.error(error);
         return res.status(500).send({ status: false, msg: error.message });
     }
 }
+
 
 //=========================================== authorisation ============================================================================================
 
