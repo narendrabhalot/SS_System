@@ -39,7 +39,7 @@ const createUser = async (req, res) => {
         console.error(error); // Log the error for debugging
         return res.status(500).json({
             status: false,
-            message: 'Error registering user!',
+            msg: 'Error registering user!',
         });
     }
 };

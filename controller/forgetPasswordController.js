@@ -39,7 +39,7 @@ const forgetPassword = async (req, res) => {
         console.error(error); // Log the error for debugging
         return res.status(500).json({
             status: false,
-            message: error.message,
+            msg: error.message,
         });
     }
 };
@@ -60,10 +60,10 @@ const verifyOTP = async (req, res) => {
         }
         user.otp = undefined;
         await user.save();
-        res.status(200).send({ status: true, message: 'OTP verification successful', data: { userId: user._id } });
+        res.status(200).send({ status: true, msg: 'OTP verification successful', data: { userId: user._id } });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: false, message: 'Error verifying OTP' });
+        res.status(500).json({ status: false, msg: 'Error verifying OTP' });
     }
 };
 module.exports = { forgetPassword, verifyOTP }

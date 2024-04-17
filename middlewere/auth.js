@@ -37,7 +37,7 @@ const authorisation = async function (req, res, next) {
         if (!isValidObjectId(userId)) {
             res
                 .status(400)
-                .send({ status: false, message: `${userId} is not a valid userId` });
+                .send({ status: false, msg: `${userId} is not a valid userId` });
             return;
         }
         let isUserExist = await userModel.findById(userId);
@@ -51,14 +51,14 @@ const authorisation = async function (req, res, next) {
         if (req.userId !== userId) {
             return res.status(403).send({
                 status: false,
-                message: `Authorisation failed; You are logged in as ${req.userId}, not as ${userId}`,
+                msg: `Authorisation failed; You are logged in as ${req.userId}, not as ${userId}`,
             });
         }
         next();
     } catch (err) {
         res.status(500).send({
             status: false,
-            message: "Internal Server Error",
+            msg: "Internal Server Error",
             error: err.message,
         });
     }

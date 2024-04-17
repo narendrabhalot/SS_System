@@ -13,7 +13,7 @@ const uploadImage = async (req, res) => {
             });
             await newImage.save();
         }
-        return res.send({ message: 'File uploaded successfully', });
+        return res.send({ msg: 'File uploaded successfully', });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
