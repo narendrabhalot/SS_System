@@ -55,14 +55,14 @@ const verifyOTP = async (req, res) => {
                 msg: value.error.message
             });
         }
-        const user = await UserModel.findOne({ otp: otp });
+        const user = await signUpModel.findOne({ otp: otp });
         if (!user) {
             return res.status(401).json({ status: false, message: 'Invalid OTP' });
         }
         user.otp = undefined;
         await user.save();
 
-        res.status(200).send({ status: true, message: 'OTP verification successful', data: user });
+        res.status(200).send({ status: true, message: 'OTP verification successful', data: { userId: _id } });
     } catch (error) {
         console.error(error);
         res.status(500).json({ status: false, message: 'Error verifying OTP' });
