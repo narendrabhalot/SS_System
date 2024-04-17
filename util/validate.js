@@ -34,12 +34,12 @@ const isValidObjectId = function (objectId) {
 };
 const otpValidation = (data) => {
     const otpSchema = Joi.object({
-        otp: Joi.string().trim().min(6).max(6).required().messages({
+        otp: Joi.string().trim().min(4).max(4).required().messages({
             'any.required': "otp is required",
-            "string.min": " otp length must be less than or equal to 6 characters long",
-            "string.max": " otp length must be less than or equal to 6 characters long",
+            "string.min": " otp length must be less than or equal to 4 digit long",
+            "string.max": " otp length must be less than or equal to 4  digit  long",
         }),
     })
     return otpSchema.validate(data)
 }
-module.exports = { userValidation, isValidObjectId, userInfoValidation ,otpValidation}
+module.exports = { userValidation, isValidObjectId, userInfoValidation, otpValidation }

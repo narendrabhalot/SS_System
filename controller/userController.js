@@ -67,7 +67,7 @@ const userLogin = async (req, res) => {
     }
 };
 
-const updateUserPassword = async (req, res) => {
+const updateUser = async (req, res) => {
     try {
         const userId = req.params.id;
         const data = req.body;
@@ -102,4 +102,4 @@ const updateUserPassword = async (req, res) => {
 
 
 
-module.exports = { createUser, userLogin, updateUserPassword }
+module.exports = { createUser, userLogin, updateUser }
