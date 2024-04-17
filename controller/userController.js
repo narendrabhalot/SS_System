@@ -2,8 +2,6 @@ const { userValidation, isValidObjectId } = require('../util/validate')
 const jwt = require('jsonwebtoken')
 const signUpModel = require('../models/signUpModel');
 
-
-
 const createUser = async (req, res) => {
     try {
         const { emailId, password } = req.body;
@@ -20,7 +18,7 @@ const createUser = async (req, res) => {
         if (existingUser) {
             return res.status(400).send({
                 status: false,
-                msg: "User is already registered.",
+                msg: "User is already registered by this mail id.",
             });
         }
 
@@ -72,9 +70,7 @@ const userLogin = async (req, res) => {
 const updateUserPassword = async (req, res) => {
     try {
         const userId = req.params.id;
-        const password = req.body.password;
-
-        // Check if userId is a valid ObjectId
+        const data = req.body;
         if (!isValidObjectId(userId)) {
             return res.status(400).send({ status: false, msg: "Invalid object Id" });
         }
@@ -82,16 +78,16 @@ const updateUserPassword = async (req, res) => {
             // Update the user's password and exclude 'otp' field from the updated document
             const updatedUser = await signUpModel.findOneAndUpdate(
                 { _id: userId },
-                { $set: { password }, $unset: { otp: "" } },
+                { $set: data },
                 { new: true, upsert: true }
             );
-            // Check if the user was found
+
             if (!updatedUser) {
                 return res.status(400).send({ status: false, msg: "User update failed" });
             }
 
             // Send response indicating successful password update
-            return res.status(200).send({ status: true, msg: "Password updated successfully" });
+            return res.status(200).send({ status: true, msg: "User updated successfully" });
         } catch (error) {
             console.error("Error updating user password:", error);
             return res.status(500).send({ status: false, msg: "Internal server error" });

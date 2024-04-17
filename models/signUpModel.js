@@ -11,6 +11,10 @@ const registrationSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
+    isUserInfo: {
+        type: Boolean,
+        default: false
+    },
     otp: {
         type: String
     }

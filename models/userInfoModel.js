@@ -20,7 +20,8 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
-    },
+    }
+  
 }, { "timestamps": true });
 
 const Registration = mongoose.model('userInfo', userInfoSchema);

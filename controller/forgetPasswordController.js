@@ -4,7 +4,7 @@ const { sendEmail } = require('../util/sendEmail')
 function generateOTP() {
     const digits = '0123456789';
     let otp = '';
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < 4; i++) {
         otp += digits[Math.floor(Math.random() * 10)];
     }
     return otp;
@@ -44,7 +44,6 @@ const forgetPassword = async (req, res) => {
     }
 };
 
-
 const verifyOTP = async (req, res) => {
     const { otp } = req.body;
     try {
@@ -61,7 +60,6 @@ const verifyOTP = async (req, res) => {
         }
         user.otp = undefined;
         await user.save();
-
         res.status(200).send({ status: true, message: 'OTP verification successful', data: { userId: user._id } });
     } catch (error) {
         console.error(error);
