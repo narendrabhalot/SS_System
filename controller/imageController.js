@@ -1,7 +1,7 @@
 const imageModel = require('../models/imageModel')
 const uploadImage = async (req, res) => {
-    let files = req.files
-    console.log(files)
+    let files = req.file
+    console.log(file)
     let userId = req.params.id
     try {
         if (files.length == 0) {
