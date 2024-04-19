@@ -1,9 +1,8 @@
 const imageModel = require('../models/imageModel')
 const uploadImage = async (req, res) => {
     let files = req.files
+    console.log(files)
     let userId = req.params.id
-
-
     try {
         if (files.length == 0) {
             return res.status(400).json({ error: 'Please select a file! ' });
