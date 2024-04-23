@@ -1,5 +1,9 @@
 const imageModel = require('../models/imageModel')
 const uploadImage = async (req, res) => {
+    const contentType = req.headers['content-type'];
+    if (!contentType || !contentType.startsWith('multipart/form-data')) {
+        return res.status(400).send('Invalid request format. Expected multipart/form-data');
+    }
     let files = req.files
     console.log(files)
     let userId = req.params.id
