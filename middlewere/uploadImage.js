@@ -6,7 +6,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadPath = path.join(__dirname, 'uploads'); // Adjust path as needed
+        const uploadPath = path.join(__dirname, '../uploads'); // Adjust path as needed
         fs.mkdirSync(uploadPath, { recursive: true });
         cb(null, uploadPath);
     },

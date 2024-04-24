@@ -8,32 +8,31 @@ const imageModel = require('../models/imageModel');
 
 const uploadImage = async (req, res) => {
 
-    console.log('Files uploaded:', req.files);
-    res.send('Files uploaded successfully.');
-    // const userId = req.params.id;
-    // const imagePaths = req.body.image;
 
-    // if (!imagePaths || !Array.isArray(imagePaths)) {
-    //     return res.status(400).json({ error: 'No images provided or invalid format' });
-    // }
+    const userId = req.params.id;
+    const imagePaths = req.body.image;
 
-    // try {
-    //     const savedImages = [];
-    //     for (const imagePath of imagePaths) {
-    //         const filename = path.basename(imagePath);
-    //         const newImage = new imageModel({
-    //             userId: userId,
-    //             image: filename,
-    //             path: imagePath
-    //         });
-    //         const savedImage = await newImage.save();
-    //         savedImages.push(savedImage);
-    //     }
-    //     res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ error: 'Internal Server Error' });
-    // }
+    if (!imagePaths || !Array.isArray(imagePaths)) {
+        return res.status(400).json({ error: 'No images provided or invalid format' });
+    }
+
+    try {
+        const savedImages = [];
+        for (const imagePath of imagePaths) {
+            const filename = path.basename(imagePath);
+            const newImage = new imageModel({
+                userId: userId,
+                image: filename,
+                path: imagePath
+            });
+            const savedImage = await newImage.save();
+            savedImages.push(savedImage);
+        }
+        res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
 }
 
 
