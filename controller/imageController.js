@@ -22,35 +22,34 @@ function convertToJSON(inputString) {
     return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
 }
 const uploadImage = async (req, res) => {
-console.log(req.files)
-    const images = req.files.map(file => file.path);
-    console.log(images);
 
-    // Respond with success message or perform further operations
-    res.send('Images uploaded successfully.');
-    // const imagePaths = req.body.image;
+    console.log(req)
+    res.send({ data: req }); // Improved response
+    // console.log(req.body)
+    //     const userId = req.params.id;
+    //     const imagePaths = req.body.image;
 
-    // if (!imagePaths || !Array.isArray(imagePaths)) {
-    //     return res.status(400).json({ error: 'No images provided or invalid format' });
-    // }
-
-    // try {
-    //     const savedImages = [];
-    //     for (const imagePath of imagePaths) {
-    //         const filename = path.basename(imagePath);
-    //         const newImage = new imageModel({
-    //             userId: userId,
-    //             image: filename,
-    //             path: imagePath
-    //         });
-    //         const savedImage = await newImage.save();
-    //         savedImages.push(savedImage);
+    //     if (!imagePaths || !Array.isArray(imagePaths)) {
+    //         return res.status(400).json({ error: 'No images provided or invalid format' });
     //     }
-    //     res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).json({ error: 'Internal Server Error' });
-    // }
+
+    //     try {
+    //         const savedImages = [];
+    //         for (const imagePath of imagePaths) {
+    //             const filename = path.basename(imagePath);
+    //             const newImage = new imageModel({
+    //                 userId: userId,
+    //                 image: filename,
+    //                 path: imagePath
+    //             });
+    //             const savedImage = await newImage.save();
+    //             savedImages.push(savedImage);
+    //         }
+    //         res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
+    //     } catch (error) {
+    //         console.error(error);
+    //         res.status(500).json({ error: 'Internal Server Error' });
+    //     }
 }
 
 
