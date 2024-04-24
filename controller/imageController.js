@@ -25,6 +25,7 @@ const uploadImage = async (req, res) => {
 
     console.log(req.body)
     const userId = req.params.id;
+    console.log(req)
     // const imagePaths = req.body.image;
 
     // if (!imagePaths || !Array.isArray(imagePaths)) {
