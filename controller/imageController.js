@@ -9,46 +9,45 @@ function convertToJSON(inputString) {
     // Remove curly braces and split the string into key-value pairs
     const keyValuePairs = inputString
         .slice(1, -1) // Remove curly braces
-        .split(/[=\s]*,\s*/); // Split by "=", ",", and whitespace
+        .split('='); // Split by "="
+
+    // Extract key and value
+    const key = keyValuePairs[0].trim();
+    const value = keyValuePairs[1].replace('[', '').replace(']', '').split(',').map(item => item.trim());
 
     // Construct JSON object
     const jsonObject = {};
-    keyValuePairs.forEach(pair => {
-        const [key, value] = pair.split('=');
-        // Trim square brackets and split by ","
-        jsonObject[key] = value.slice(1, -1).split(', ');
-    });
+    jsonObject[key] = value;
 
-    return JSON.stringify(jsonObject);
+    return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
 }
 const uploadImage = async (req, res) => {
 
-
+    console.log(req.body)
     const userId = req.params.id;
-    const imagePaths = convertToJSON(req.body)
-    console.log(imagePaths)
+    // const imagePaths = req.body.image;
 
-    if (!imagePaths || !Array.isArray(imagePaths)) {
-        return res.status(400).json({ error: 'No images provided or invalid format' });
-    }
+    // if (!imagePaths || !Array.isArray(imagePaths)) {
+    //     return res.status(400).json({ error: 'No images provided or invalid format' });
+    // }
 
-    try {
-        const savedImages = [];
-        for (const imagePath of imagePaths) {
-            const filename = path.basename(imagePath);
-            const newImage = new imageModel({
-                userId: userId,
-                image: filename,
-                path: imagePath
-            });
-            const savedImage = await newImage.save();
-            savedImages.push(savedImage);
-        }
-        res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+    // try {
+    //     const savedImages = [];
+    //     for (const imagePath of imagePaths) {
+    //         const filename = path.basename(imagePath);
+    //         const newImage = new imageModel({
+    //             userId: userId,
+    //             image: filename,
+    //             path: imagePath
+    //         });
+    //         const savedImage = await newImage.save();
+    //         savedImages.push(savedImage);
+    //     }
+    //     res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
+    // } catch (error) {
+    //     console.error(error);
+    //     res.status(500).json({ error: 'Internal Server Error' });
+    // }
 }
 
 
