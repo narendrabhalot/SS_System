@@ -2,7 +2,7 @@ const express = require('express');
 const multer = require('multer'); // Import Multer for file uploads (optional)
 const path = require('path'); // Import path for file path manipulation
 const fs = require('fs').promises; // Import fs.promises for asynchronous file operations (optional)
-
+const { customMulterImageUpload } = require('../middlewere/uploadImage')
 const imageModel = require('../models/imageModel');
 
 function convertToJSON(inputString) {
@@ -22,35 +22,40 @@ function convertToJSON(inputString) {
     return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
 }
 const uploadImage = async (req, res) => {
+    try {
+        console.log(req);
 
-    console.log(req)
-    res.send({ data: req }); // Improved response
-    // console.log(req.body)
-    //     const userId = req.params.id;
-    //     const imagePaths = req.body.image;
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal server error'); // Generic error for unexpected issues
+    }
+};
+// console.log(req.body)
+//     const userId = req.params.id;
+//     const imagePaths = req.body.image;
 
-    //     if (!imagePaths || !Array.isArray(imagePaths)) {
-    //         return res.status(400).json({ error: 'No images provided or invalid format' });
-    //     }
+//     if (!imagePaths || !Array.isArray(imagePaths)) {
+//         return res.status(400).json({ error: 'No images provided or invalid format' });
+//     }
 
-    //     try {
-    //         const savedImages = [];
-    //         for (const imagePath of imagePaths) {
-    //             const filename = path.basename(imagePath);
-    //             const newImage = new imageModel({
-    //                 userId: userId,
-    //                 image: filename,
-    //                 path: imagePath
-    //             });
-    //             const savedImage = await newImage.save();
-    //             savedImages.push(savedImage);
-    //         }
-    //         res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).json({ error: 'Internal Server Error' });
-    //     }
-}
+//     try {
+//         const savedImages = [];
+//         for (const imagePath of imagePaths) {
+//             const filename = path.basename(imagePath);
+//             const newImage = new imageModel({
+//                 userId: userId,
+//                 image: filename,
+//                 path: imagePath
+//             });
+//             const savedImage = await newImage.save();
+//             savedImages.push(savedImage);
+//         }
+//         res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+
 
 
 
