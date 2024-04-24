@@ -5,12 +5,28 @@ const fs = require('fs').promises; // Import fs.promises for asynchronous file o
 
 const imageModel = require('../models/imageModel');
 
+function convertToJSON(inputString) {
+    // Remove curly braces and split the string into key-value pairs
+    const keyValuePairs = inputString
+        .slice(1, -1) // Remove curly braces
+        .split(/[=\s]*,\s*/); // Split by "=", ",", and whitespace
 
+    // Construct JSON object
+    const jsonObject = {};
+    keyValuePairs.forEach(pair => {
+        const [key, value] = pair.split('=');
+        // Trim square brackets and split by ","
+        jsonObject[key] = value.slice(1, -1).split(', ');
+    });
+
+    return JSON.stringify(jsonObject);
+}
 const uploadImage = async (req, res) => {
 
 
     const userId = req.params.id;
-    const imagePaths = req.body.image;
+    const imagePaths = convertToJSON(req.body)
+    console.log(imagePaths)
 
     if (!imagePaths || !Array.isArray(imagePaths)) {
         return res.status(400).json({ error: 'No images provided or invalid format' });
