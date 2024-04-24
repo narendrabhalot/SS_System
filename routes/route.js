@@ -12,5 +12,5 @@ router.post('/verify-otp', verifyOTP)
 router.put('/update-user/:id', updateUser)
 router.post('/logIn', userLogin)
 router.post('/userInfo', createUserInfo)
-router.post('/image/:id', customMulterImageUpload, uploadImage)
+router.post('/image/:id',  upload.array('image'), uploadImage)
 module.exports = router

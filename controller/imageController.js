@@ -22,10 +22,12 @@ function convertToJSON(inputString) {
     return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
 }
 const uploadImage = async (req, res) => {
+console.log(req.files)
+    const images = req.files.map(file => file.path);
+    console.log(images);
 
-    console.log(req.body)
-    const userId = req.params.id;
-    console.log(req)
+    // Respond with success message or perform further operations
+    res.send('Images uploaded successfully.');
     // const imagePaths = req.body.image;
 
     // if (!imagePaths || !Array.isArray(imagePaths)) {
