@@ -1,3 +1,6 @@
+const multer = require('multer');
+
+const upload = multer();
 const express = require("express");
 const router = express.Router()
 const { createUser, userLogin, updateUser } = require('../controller/userController')
@@ -12,5 +15,5 @@ router.post('/verify-otp', verifyOTP)
 router.put('/update-user/:id', updateUser)
 router.post('/logIn', userLogin)
 router.post('/userInfo', createUserInfo)
-router.post('/image/:id',  upload.array('image'), uploadImage)
+router.post('/image/:id', upload.array('image'), uploadImage)
 module.exports = router
