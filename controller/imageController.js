@@ -9,7 +9,7 @@ const imageModel = require('../models/imageModel');
 
 const uploadImage = async (req, res) => {
     try {
-        console.log("req,",req)
+        console.log("req,", req)
         // Validate uploaded images (replace with your specific validation logic)
         if (!req.files || !req.files.image || !req.files.image.length) {
             throw new Error('No image files uploaded');
@@ -33,7 +33,7 @@ const uploadImage = async (req, res) => {
         res.status(200).send('Images uploaded successfully!'); // Success response
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error uploading images'); // Handle errors
+        res.status(500).send({ error: error.message }, 'Error uploading images'); // Handle errors
     }
 };
 
