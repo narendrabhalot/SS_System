@@ -9,29 +9,25 @@ const imageModel = require('../models/imageModel');
 
 const uploadImage = async (req, res) => {
     try {
-        console.log("req,", req)
-        // Validate uploaded images (replace with your specific validation logic)
-      
-
-        const uploadedImages = req.files.image;
-
-        // Loop through and process each uploaded image (with basic validation)
-        uploadedImages.forEach(image => {
-            const allowedExtensions = ['.jpg', '.jpeg', '.png']; // Allowed image extensions
-            const ext = path.extname(image.originalname).toLowerCase();
-
-            if (!allowedExtensions.includes(ext)) {
-                throw new Error(`Invalid file type: ${image.originalname}`);
-            }
-
-            console.log(image.originalname); // Original filename
-            console.log(image.path); // Path where the file is saved
-        });
-
-        res.status(200).send('Images uploaded successfully!'); // Success response
+        console.log(" only console req.file",req.files)
+        let userId=req.params.id
+        let files = req.files.image
+        console.log(files)
+        if (files.length == 0) {
+            return res.status(400).json({ error: 'Please select a file! ' });
+        }
+        for (const file of files) {
+            const newImage = new imageModel({
+                userId: userId,
+                image: file.originalname,
+                path: file.path,
+            });
+            await newImage.save();
+        }
+        return res.send({ msg: 'File uploaded successfully', });
     } catch (error) {
         console.error(error);
-        res.status(500).send({ error: error.message }, 'Error uploading images'); // Handle errors
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
