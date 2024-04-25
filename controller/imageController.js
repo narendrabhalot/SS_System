@@ -11,9 +11,7 @@ const uploadImage = async (req, res) => {
     try {
         console.log("req,", req)
         // Validate uploaded images (replace with your specific validation logic)
-        if (!req.files || !req.files.image || !req.files.image.length) {
-            throw new Error('No image files uploaded');
-        }
+      
 
         const uploadedImages = req.files.image;
 

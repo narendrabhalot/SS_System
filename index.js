@@ -11,12 +11,13 @@ const dbConnectionString = process.env.DB_CONNECTION_STRING;
 const sessionSecret = process.env.SESSION_SECRET;
 const app = express();
 const route = require("./routes/route");
+const multer = require("multer");
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: 'http://104.237.8.163:3000',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // Enable if you need to send cookies with the request
 }));
