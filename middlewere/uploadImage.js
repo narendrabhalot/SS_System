@@ -23,10 +23,10 @@ const storage = multer.diskStorage({
 // Define upload limits (optional, adjust as needed)
 const uploadLimits = {
 
-    files: 10, 
+    files: 10,
 };
 
 // Create a Multer middleware instance with limitations
 const customMulterImageUpload = multer({ storage: storage, limits: uploadLimits }).fields([{ name: 'image', maxCount: 10 }]);
 
-module.exports={customMulterImageUpload}
+module.exports = { customMulterImageUpload }
