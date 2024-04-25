@@ -10,6 +10,8 @@ app.use(express.urlencoded({ extended: true }));
 // Configure storage for uploaded files (replace 'uploads' with your desired path)
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
+        console.log("req by android developer :- ", req)
+        console.log("file by android developer :- ", file)
         cb(null, 'uploads/'); // Change 'uploads' to your preferred upload directory
     },
     filename: (req, file, cb) => {
