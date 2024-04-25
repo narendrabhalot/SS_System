@@ -5,96 +5,127 @@ const fs = require('fs').promises; // Import fs.promises for asynchronous file o
 const { customMulterImageUpload } = require('../middlewere/uploadImage')
 const imageModel = require('../models/imageModel');
 
-function convertToJSON(inputString) {
-    // Remove curly braces and split the string into key-value pairs
-    const keyValuePairs = inputString
-        .slice(1, -1) // Remove curly braces
-        .split('='); // Split by "="
 
-    // Extract key and value
-    const key = keyValuePairs[0].trim();
-    const value = keyValuePairs[1].replace('[', '').replace(']', '').split(',').map(item => item.trim());
 
-    // Construct JSON object
-    const jsonObject = {};
-    jsonObject[key] = value;
-
-    return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
-}
 const uploadImage = async (req, res) => {
     try {
-        console.log(req);
+        // Validate uploaded images (replace with your specific validation logic)
+        if (!req.files || !req.files.image || !req.files.image.length) {
+            throw new Error('No image files uploaded');
+        }
 
+        const uploadedImages = req.files.image;
+
+        // Loop through and process each uploaded image (with basic validation)
+        uploadedImages.forEach(image => {
+            const allowedExtensions = ['.jpg', '.jpeg', '.png']; // Allowed image extensions
+            const ext = path.extname(image.originalname).toLowerCase();
+
+            if (!allowedExtensions.includes(ext)) {
+                throw new Error(`Invalid file type: ${image.originalname}`);
+            }
+
+            console.log(image.originalname); // Original filename
+            console.log(image.path); // Path where the file is saved
+        });
+
+        res.status(200).send('Images uploaded successfully!'); // Success response
     } catch (error) {
         console.error(error);
-        res.status(500).send('Internal server error'); // Generic error for unexpected issues
+        res.status(500).send('Error uploading images'); // Handle errors
     }
 };
-// console.log(req.body)
-//     const userId = req.params.id;
-//     const imagePaths = req.body.image;
 
-//     if (!imagePaths || !Array.isArray(imagePaths)) {
-//         return res.status(400).json({ error: 'No images provided or invalid format' });
-//     }
+// function convertToJSON(inputString) {
+//     // Remove curly braces and split the string into key-value pairs
+//     const keyValuePairs = inputString
+//         .slice(1, -1) // Remove curly braces
+//         .split('='); // Split by "="
 
-//     try {
-//         const savedImages = [];
-//         for (const imagePath of imagePaths) {
-//             const filename = path.basename(imagePath);
-//             const newImage = new imageModel({
-//                 userId: userId,
-//                 image: filename,
-//                 path: imagePath
-//             });
-//             const savedImage = await newImage.save();
-//             savedImages.push(savedImage);
-//         }
-//         res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Internal Server Error' });
-//     }
+//     // Extract key and value
+//     const key = keyValuePairs[0].trim();
+//     const value = keyValuePairs[1].replace('[', '').replace(']', '').split(',').map(item => item.trim());
 
+//     // Construct JSON object
+//     const jsonObject = {};
+//     jsonObject[key] = value;
 
-
-
-
-
-
-
-
-
-
-
-
-
-// const imageModel = require('../models/imageModel')
+//     return JSON.stringify(jsonObject, null, 4); // Convert object to JSON with indentation
+// }
 // const uploadImage = async (req, res) => {
-//     const contentType = req.headers['content-type'];
-//     if (!contentType || !contentType.startsWith('multipart/form-data')) {
-//         return res.status(400).send('Invalid request format. Expected multipart/form-data');
-//     }
-//     let files = req.files
-//     console.log(files)
-//     let userId = req.params.id
 //     try {
-//         if (files.length == 0) {
-//             return res.status(400).json({ error: 'Please select a file! ' });
-//         }
-//         for (const file of files) {
-//             const newImage = new imageModel({
-//                 userId: userId,
-//                 image: file.originalname,
-//                 path: file.path,
-//             });
-//             await newImage.save();
-//         }
-//         return res.send({ msg: 'File uploaded successfully', });
+//         console.log(req);
+
 //     } catch (error) {
 //         console.error(error);
-//         res.status(500).json({ error: 'Internal Server Error' });
+//         res.status(500).send('Internal server error'); // Generic error for unexpected issues
 //     }
 // };
+// // console.log(req.body)
+// //     const userId = req.params.id;
+// //     const imagePaths = req.body.image;
+
+// //     if (!imagePaths || !Array.isArray(imagePaths)) {
+// //         return res.status(400).json({ error: 'No images provided or invalid format' });
+// //     }
+
+// //     try {
+// //         const savedImages = [];
+// //         for (const imagePath of imagePaths) {
+// //             const filename = path.basename(imagePath);
+// //             const newImage = new imageModel({
+// //                 userId: userId,
+// //                 image: filename,
+// //                 path: imagePath
+// //             });
+// //             const savedImage = await newImage.save();
+// //             savedImages.push(savedImage);
+// //         }
+// //         res.send({ message: 'Images uploaded successfully!', data: savedImages }); // Improved response
+// //     } catch (error) {
+// //         console.error(error);
+// //         res.status(500).json({ error: 'Internal Server Error' });
+// //     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // const imageModel = require('../models/imageModel')
+// // const uploadImage = async (req, res) => {
+// //     const contentType = req.headers['content-type'];
+// //     if (!contentType || !contentType.startsWith('multipart/form-data')) {
+// //         return res.status(400).send('Invalid request format. Expected multipart/form-data');
+// //     }
+// //     let files = req.files
+// //     console.log(files)
+// //     let userId = req.params.id
+// //     try {
+// //         if (files.length == 0) {
+// //             return res.status(400).json({ error: 'Please select a file! ' });
+// //         }
+// //         for (const file of files) {
+// //             const newImage = new imageModel({
+// //                 userId: userId,
+// //                 image: file.originalname,
+// //                 path: file.path,
+// //             });
+// //             await newImage.save();
+// //         }
+// //         return res.send({ msg: 'File uploaded successfully', });
+// //     } catch (error) {
+// //         console.error(error);
+// //         res.status(500).json({ error: 'Internal Server Error' });
+// //     }
+// // };
 
 module.exports = { uploadImage }
