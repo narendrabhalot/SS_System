@@ -1,32 +1,62 @@
-const express = require('express');
 const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
-const app = express();
-app.use(express.urlencoded({ extended: true }));
 
-
-
-// Configure storage for uploaded files (replace 'uploads' with your desired path)
+// Configure multer storage and file name
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log("req by android developer :- ", req)
-        console.log("file by android developer :- ", file)
-        cb(null, 'uploads/'); // Change 'uploads' to your preferred upload directory
+        cb(null, 'uploads/');
     },
     filename: (req, file, cb) => {
-        const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniquePrefix + '-' + path.basename(file.originalname));
-    },
+        cb(null, Date.now() + '-' + file.originalname);
+    }
 });
 
-// Define upload limits (optional, adjust as needed)
-const uploadLimits = {
+// Create multer upload instance
+const upload = multer({ storage: storage });
 
-    files: 10,
+// Custom file upload middleware
+const uploadMiddleware = (req, res, next) => {
+    // Use multer upload instance
+    upload.array('image', 5)(req, res, (err) => {
+        if (err) {
+            return res.status(400).json({ error: err.message });
+        }
+
+        // Retrieve uploaded files
+        const files = req.files;
+        const errors = [];
+
+        // Validate file types and sizes
+        files.forEach((file) => {
+            const allowedTypes = ['image/jpeg', 'image/png'];
+            const maxSize = 5 * 1024 * 1024; // 5MB
+
+            if (!allowedTypes.includes(file.mimetype)) {
+                errors.push(`Invalid file type: ${file.originalname}`);
+            }
+
+            if (file.size > maxSize) {
+                errors.push(`File too large: ${file.originalname}`);
+            }
+        });
+
+        // Handle validation errors
+        if (errors.length > 0) {
+            // Remove uploaded files
+            files.forEach((file) => {
+                fs.unlinkSync(file.path);
+            });
+
+            return res.status(400).json({ errors });
+        }
+
+        // Attach files to the request object
+        req.files = files;
+
+        // Proceed to the next middleware or route handler
+        next();
+    });
 };
 
-// Create a Multer middleware instance with limitations
-const customMulterImageUpload = multer({ storage: storage, limits: uploadLimits }).fields([{ name: 'image', maxCount: 10 }]);
-
-module.exports = { customMulterImageUpload }
+module.exports = uploadMiddleware;
