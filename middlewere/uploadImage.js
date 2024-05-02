@@ -19,6 +19,7 @@ const upload = multer({ storage: storage });
 const uploadMiddleware = (req, res, next) => {
     try {
         // Check if request contains multipart form data
+        console.log("req.params.id inside ihe midleware ",req.params.id)
         if (!req.is('multipart/form-data')) {
             console.log("err:Request must be sent as multipart/form-data")
             return res.status(400).json({ error: 'Request must be sent as multipart/form-data' });
