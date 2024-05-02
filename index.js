@@ -22,7 +22,7 @@ app.use(cors({
     credentials: true, // Enable if you need to send cookies with the request
 }));
 
-app.use(express.static(path.join(__dirname, 'uploads')));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 console.log("this is the file ", path.join(__dirname, 'uploads'));
 app.use("/", route);
 mongoose.connect(dbConnectionString, {
