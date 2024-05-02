@@ -11,6 +11,8 @@ const uploadImage = async (req, res) => {
     try {
         console.log(" only console req.file", req.files)
         let userId = req.params.id
+        let userIds = req.body.userId 
+        console.log("req.body .userId inside the controler  ",userIds)
         console.log("req.params.id inside the controler  ",req.params.id)
         let files = req.files
         console.log(files)
