@@ -9,27 +9,27 @@ const imageModel = require('../models/imageModel');
 
 const uploadImage = async (req, res) => {
     try {
-        console.log(" only console req.file", req.files)
-        let userId = req.params.id
-        let userIds = req.body.userId
-        let image = req.body.image
-        console.log("req.body .image  inside the controler  ", image)
-        console.log("req.body .userId inside the controler  ", userIds)
-        console.log("req.params.id inside the controler  ", req.params.id)
-        let files = req.files
-        console.log(files)
-        if (files.length == 0) {
-            return res.status(400).json({ error: 'Please select a file! ' });
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({ error: 'Please select a file!' });
         }
-        for (const file of files) {
-            const newImage = new imageModel({
-                userId: userId,
-                image: file.originalname,
-                path: file.path,
-            });
-            await newImage.save();
+
+        const files = req.files;
+        let userId = req.params.id;
+     
+
+        for (const imageKey in files) {
+            const imageList = files[imageKey]; // Array of file objects
+            for (const file of imageList) {
+                const newImage = new imageModel({
+                    userId: userId,
+                    image: file.originalname, // Filename for reference
+                    path: file.path,
+                });
+                await newImage.save();
+            }
         }
-        return res.send({ msg: 'File uploaded successfully', });
+        console.log("'File(s) uploaded successfully'")
+        return res.send({ msg: 'File(s) uploaded successfully', });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
