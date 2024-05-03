@@ -5,7 +5,7 @@ const imageSchema = new mongoose.Schema({
     path: String,
     imageStatus: {
         type: String,
-        enum: ["Pending", "Processing", "Success"],
+        enum: ["Pending", "Processing", "Success", "Reject"],
         default: "Pending"
     }
 }, { timestamps: true });
