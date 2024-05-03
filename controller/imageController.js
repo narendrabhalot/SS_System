@@ -38,9 +38,10 @@ const uploadImage = async (req, res) => {
 
 
 
-const getImages = async (req, res) => {
+const getImagesbyId = async (req, res) => {
     try {
-        const images = await imageModel.find()
+        const userId = req.params.userId
+        const images = await imageModel.find({ userId: userId })
         if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
@@ -60,4 +61,4 @@ const getImages = async (req, res) => {
 }
 
 
-module.exports = { uploadImage, getImages }
+module.exports = { uploadImage, getImagesbyId }
