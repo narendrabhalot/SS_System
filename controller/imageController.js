@@ -9,7 +9,7 @@ const imageModel = require('../models/imageModel');
 
 const uploadImage = async (req, res) => {
 
-    let geturl = "https://ss-system-g6qb.onrender.com"
+    let geturl = "https://ss-system-g6qb.onrender.com/"
     try {
         if (!req.files || Object.keys(req.files).length === 0) {
             return res.status(400).json({ error: 'Please select a file!' });
@@ -25,7 +25,7 @@ const uploadImage = async (req, res) => {
                 const newImage = new imageModel({
                     userId: userId,
                     image: file.originalname,
-                    path: geturl + '\\' + file.path,
+                    path: geturl + file.path,
                 });
                 await newImage.save();
             }
