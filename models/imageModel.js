@@ -3,6 +3,11 @@ const imageSchema = new mongoose.Schema({
     userId: String,
     image: String,
     path: String,
+    imageStatus: {
+        type: String,
+        enum: ["Pending", "Processing", "Success"],
+        default: "Pending"
+    }
 }, { timestamps: true });
 
 
