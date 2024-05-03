@@ -10,9 +10,9 @@ const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); // Change 'uploads' to your preferred upload directory
     },
-    filename: (req, file, cb) => {
+    filename: function (req, file, cb) {
         const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        cb(null, uniquePrefix + '-' + path.basename(file.originalname));
+        cb(null, uniquePrefix + '-' + file.originalname);
     },
 });
 
@@ -27,4 +27,4 @@ const customMulterImageUpload = multer({ storage: storage, limits: uploadLimits 
     Array.from({ length: 30 }, (_, i) => ({ name: `image${i}`, maxCount: 1 }))
 );
 
-module.exports={customMulterImageUpload}
+module.exports = { customMulterImageUpload }

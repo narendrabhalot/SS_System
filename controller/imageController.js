@@ -22,7 +22,7 @@ const uploadImage = async (req, res) => {
             for (const file of imageList) {
                 const newImage = new imageModel({
                     userId: userId,
-                    image: file.originalname, // Filename for reference
+                    image: file.originalname,
                     path: file.path,
                 });
                 await newImage.save();
@@ -41,11 +41,11 @@ const uploadImage = async (req, res) => {
 const getImages = async (req, res) => {
     try {
         const images = await imageModel.find()
-        if (images.length >0) {
+        if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
             })
-           
+
         } else {
             return res.status(404).send({ status: false, msg: "image not found " })
         }

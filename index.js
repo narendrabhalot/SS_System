@@ -1,17 +1,15 @@
 
-
 const express = require("express");
 const path = require('path')
-
+const session = require('express-session')
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require('cors')
 require('dotenv').config();
 const dbConnectionString = process.env.DB_CONNECTION_STRING;
-const sessionSecret = process.env.SESSION_SECRET;
+
 const app = express();
 const route = require("./routes/route");
-const multer = require("multer");
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -19,9 +17,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // Enable if you need to send cookies with the request
+    credentials: true
 }));
-
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 console.log("this is the file ", path.join(__dirname, 'uploads'));
 app.use("/", route);
