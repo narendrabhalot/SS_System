@@ -43,7 +43,6 @@ const createUser = async (req, res) => {
         });
     }
 };
-
 const userLogin = async (req, res) => {
     try {
         const { emailId, password } = req.body;
@@ -66,6 +65,18 @@ const userLogin = async (req, res) => {
         return res.status(500).send({ status: false, msg: "Error logging in" });
     }
 };
+const getUsers = async (req, res) => {
+    try {
+        let user = await signUpModel.find()
+        if (user.length > 0) {
+            return res.status(200).send({ status: true, msg: "User find successfully ", data: user })
+        } else {
+            return res.status(200).send({ status: false, msg: "None of the users are registered." })
+        }
+    } catch (error) {
+        return res.status(500).send({ status: false, msg: "server error during thegetting user ", error: error.message })
+    }
+}
 
 const updateUser = async (req, res) => {
     try {
@@ -102,4 +113,4 @@ const updateUser = async (req, res) => {
 
 
 
-module.exports = { createUser, userLogin, updateUser }
+module.exports = { createUser, userLogin, updateUser, getUsers }
