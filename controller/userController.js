@@ -92,12 +92,9 @@ const updateUser = async (req, res) => {
                 { $set: data },
                 { new: true, upsert: true }
             );
-
             if (!updatedUser) {
                 return res.status(400).send({ status: false, msg: "User update failed" });
             }
-
-            // Send response indicating successful password update
             return res.status(200).send({ status: true, msg: "User updated successfully" });
         } catch (error) {
             console.error("Error updating user password:", error);
@@ -108,9 +105,5 @@ const updateUser = async (req, res) => {
         return res.status(500).send({ status: false, msg: "Internal server error" });
     }
 };
-
-
-
-
 
 module.exports = { createUser, userLogin, updateUser, getUsers }

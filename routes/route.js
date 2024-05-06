@@ -8,7 +8,7 @@ const { forgetPassword, verifyOTP } = require('../controller/forgetPasswordContr
 const { authentication } = require('../middlewere/auth')
 const { uploadImage, getImagesbyId, getImagesbyImageStatus } = require('../controller/imageController')
 const { customMulterImageUpload } = require('../middlewere/uploadImage')
-const { createUserInfo } = require('../controller/userInfoController')
+const { createUserInfo,getAllUserInfo } = require('../controller/userInfoController')
 router.post('/signUp', createUser)
 router.get('/user', getUsers)
 router.post('/forget-password', forgetPassword)
@@ -16,6 +16,7 @@ router.post('/verify-otp', verifyOTP)
 router.put('/update-user/:id', updateUser)
 router.post('/logIn', userLogin)
 router.post('/userInfo', createUserInfo)
+router.get('/userInfo', getAllUserInfo)
 router.post('/image/:id', customMulterImageUpload, uploadImage)
 router.get('/images/:userId', getImagesbyId);
 router.get('/images/:userId/:imageStatus', getImagesbyImageStatus);

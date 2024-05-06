@@ -20,9 +20,13 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true
+    },
+    userStatus: {
+        type: String,
+        enum: ["1", "2"],
+        trim: true,
+        default:"1"
     }
-
 }, { "timestamps": true });
 
-const Registration = mongoose.model('userInfo', userInfoSchema);
-module.exports = Registration;
+module.exports = mongoose.model('userInfo', userInfoSchema);

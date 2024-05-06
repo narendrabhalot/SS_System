@@ -20,9 +20,15 @@ const userInfoValidation = (data) => {
         userName: Joi.string().trim().required().messages({
             'any.required': "User Name is required",
         }),
-        mobileNumber: Joi.string().trim().required().messages({
-            'any.required': "user mobile Number is required",
-        }),
+        mobileNumber: Joi.string()
+            .trim()
+            .pattern(/^[6-9][0-9]{9}$/)
+            .required()
+            .messages({
+                'any.required': "User mobile number is required",
+                'string.pattern.base': "Invalid mobile number. Please enter a 10-digit number without spaces or special characters."
+            }),
+
         password: Joi.string().trim().required().messages({
             'any.required': "user password  is required",
         }),
