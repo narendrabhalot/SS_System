@@ -1,6 +1,7 @@
 const { object } = require('joi');
 const mongoose = require('mongoose');
 const userInfoSchema = new mongoose.Schema({
+    refUserId: { type: mongoose.Schema.Types.ObjectId, ref: 'UserRegistration' },
     userName: {
         type: String,
         required: true,
@@ -25,7 +26,7 @@ const userInfoSchema = new mongoose.Schema({
         type: String,
         enum: ["1", "2"],
         trim: true,
-        default:"1"
+        default: "1"
     }
 }, { "timestamps": true });
 

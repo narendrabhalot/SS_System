@@ -3,7 +3,7 @@ const userInfoModel = require('../models/userInfoModel')
 const { userInfoValidation } = require('../util/validate')
 const createUserInfo = async (req, res) => {
     try {
-        const { userId, userName, mobileNumber, password } = req.body;
+        const { refUserId,userId, userName, mobileNumber, password } = req.body;
         const validationResult = await userInfoValidation(req.body);
         if (validationResult.error) {
             return res.status(400).send({
@@ -20,7 +20,7 @@ const createUserInfo = async (req, res) => {
         }
         const userInfo = new userInfoModel({
 
-            userId, userName, mobileNumber, password,
+            refUserId,userId, userName, mobileNumber, password,
 
         })
         await userInfo.save()

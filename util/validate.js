@@ -14,6 +14,14 @@ const userValidation = (data) => {
 };
 const userInfoValidation = (data) => {
     const userSchema = Joi.object({
+        refUserId: Joi.string().trim().required().custom((value, helpers) => {
+            if (!mongoose.Types.ObjectId.isValid(value)) {
+                return helpers.message('Invalid refUserId. Must be a valid ObjectId');
+            }
+            return value;
+        }).messages({
+            'any.required': 'refUserId is required'
+        }),
         userId: Joi.string().trim().required().messages({
             'any.required': "userId is required",
         }),

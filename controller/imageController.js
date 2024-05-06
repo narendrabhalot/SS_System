@@ -38,21 +38,14 @@ const uploadImage = async (req, res) => {
 
 
 
-const getImagesbyId = async (req, res) => {
+const getImagesbyImageStatus = async (req, res) => {
     try {
-        const userId = req.params.userId
-        if (!userId) {
-            return res.status(400).send({ status: false, msg: " UserId required ." });
-        }
-        if (!isValidObjectId(userId)) {
-            return res.status(404).send({ status: false, msg: "Valid userId required." });
-        }
-        const images = await imageModel.find({ userId: userId })
+        const imageStatus = req.params.ImageStatus
+        const images = await imageModel.find({ imageStatus: imageStatus })
         if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
             })
-
         } else {
             return res.status(404).send({ status: false, msg: "image not found " })
         }
@@ -61,13 +54,10 @@ const getImagesbyId = async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-
-
-
 }
 
 
-const getImagesbyImageStatus = async (req, res) => {
+const getImagesbyIdAndImageStatus = async (req, res) => {
     try {
         const userId = req.params.userId
         const imageStatus = req.params.imageStatus
@@ -95,4 +85,4 @@ const getImagesbyImageStatus = async (req, res) => {
 
 }
 
-module.exports = { uploadImage, getImagesbyId, getImagesbyImageStatus }
+module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus }
