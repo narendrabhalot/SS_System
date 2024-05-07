@@ -36,24 +36,30 @@ const uploadImage = async (req, res) => {
 const getImagesbyImageStatus = async (req, res) => {
     try {
         const imageStatus = req.params.ImageStatus;
-        const images = await imageModel.find({  imageStatus: imageStatus })
-        // const images = await imageModel.find({ imageStatus: imageStatus }).populate({
-        //     path: 'userData',
-        //     select: 'emailId _id'
-        // }).exec();
+        const images = await imageModel.aggregate([
+            {
+                $match: {
+                    imageStatus: imageStatus
+                }
+            },
+            {
+                $lookup: {
+                    from: "userinfos",
+                    localField: "userData",
+                    foreignField: "refUserId",
+                    as: "userInfo"
+                }
+            },
+            {
+                $project: {
+                    image: 1,
+                    path: 1,
+                    "userInfo.userName": 1, // Include specific fields from the userInfo array
+                    "userInfo.userId": 1
+                }
+            }
 
-
-        // // Extract userIds from images
-        // const userIds = images.map(image => image.userId);
-
-        // // Populate userInfo based on userIds
-        // const userInfo = await userInfoModel.find({ refUserId: { $in: userIds } });
-
-        // // Map userInfo to images
-        // const populatedImages = images.map(image => {
-        //     const userInfoForImage = userInfo.find(info => info.refUserId.equals(image.userId));
-        //     return { ...image.toObject(), userInfo: userInfoForImage };
-        // });
+        ]);
         if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
