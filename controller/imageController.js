@@ -31,8 +31,6 @@ const uploadImage = async (req, res) => {
     }
 };
 
-
-
 const getImagesbyImageStatus = async (req, res) => {
     try {
         const imageStatus = req.params.ImageStatus;
@@ -73,8 +71,6 @@ const getImagesbyImageStatus = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
-
-
 const getImagesbyIdAndImageStatus = async (req, res) => {
     try {
         const userId = req.params.userId
@@ -103,4 +99,45 @@ const getImagesbyIdAndImageStatus = async (req, res) => {
 
 }
 
-module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus }
+const updateImageById = async (req, res) => {
+    try {
+        // 1. Validate Image ID
+        const imageId = req.params.imageId;
+        if (!isValidObjectId(imageId)) { // Replace with your ID validation logic
+            return res.status(400).send({ status: false, error: 'Invalid image ID format' });
+        }
+
+        // 2. Validate Image Status
+        const updateImageStatus = req.body.imageStatus;
+
+
+        // 3. Find Image Document
+
+        const validStatuses = ['Pending', 'Success', 'Rejected']// Adjust as needed
+        if (!validStatuses.includes(updateImageStatus)) {
+            return res.status(400).send({ status: false, error: 'Invalid image status' });
+        }
+        const getImage = await imageModel.findById(imageId);
+        if (!getImage) {
+            return res.status(404).send({ status: false, error: 'Image not found' });
+        }
+        // 4. Update Image with Validation
+        const updatedImage = await imageModel.findByIdAndUpdate(
+            imageId,
+            { $set: { imageStatus: updateImageStatus } },
+            { new: true, runValidators: true } // Ensure validation during update
+        );
+
+        if (!updatedImage) {
+            // Handle potential validation errors or other update failures
+            return res.status(500).send({ status: false, error: 'Failed to update image' });
+        }
+
+        return res.status(200).send({ status: true, msg: "Image updated successfully" });
+    } catch (error) {
+        console.error('Error updating image:', error); // Log the error for debugging
+        return res.status(500).send({ status: false, error: 'Internal server error', error: error.message });
+    }
+};
+
+module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus, updateImageById }
