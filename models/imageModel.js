@@ -1,27 +1,25 @@
 const mongoose = require('mongoose');
+
 const imageSchema = new mongoose.Schema({
-    userName: {
-        type: String,
-        required: true,
-        trim: true,
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "userInfo",
+        required: true
     },
-    userName: {
+    image: {
         type: String,
-        required: true,
-        trim: true,
+        required: true
     },
-    userName: {
+    path: {
         type: String,
-        required: true,
-        trim: true,
+        required: true
     },
     imageStatus: {
         type: String,
-        enum: ["Pending", "Processing", "Success", "Reject"],
-        trim: true,
-        default: "Pending"
-    }
+        enum: ['Pending', 'Approved', 'Rejected'],
+        default: 'Pending'
+    },
+
 }, { timestamps: true });
 
-
-module.exports = mongoose.model('image', imageSchema);
+module.exports = mongoose.model('Image', imageSchema);

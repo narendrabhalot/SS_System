@@ -16,9 +16,8 @@ const storage = multer.diskStorage({
     },
 });
 
-// Define upload limits (optional, adjust as needed)
 const uploadLimits = {
-    files: 30, // Maximum 30 files
+    files: 30,
 };
 
 // Create a Multer middleware instance with limitations

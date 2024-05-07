@@ -5,6 +5,7 @@ const { isValidObjectId } = require('../util/validate')
 const fs = require('fs').promises; // Import fs.promises for asynchronous file operations (optional)
 
 const imageModel = require('../models/imageModel');
+const userInfoModel = require('../models/userInfoModel');
 const uploadImage = async (req, res) => {
 
     let geturl = "https://ss-system-g6qb.onrender.com/"
@@ -40,8 +41,21 @@ const uploadImage = async (req, res) => {
 
 const getImagesbyImageStatus = async (req, res) => {
     try {
-        const imageStatus = req.params.ImageStatus
-        const images = await imageModel.find({ imageStatus: imageStatus })
+        const imageStatus = req.params.ImageStatus;
+        const images = await imageModel.find({ imageStatus: imageStatus }).populate('userId').exec();
+
+
+        // Extract userIds from images
+        const userIds = images.map(image => image.userId);
+
+        // Populate userInfo based on userIds
+        const userInfo = await userInfoModel.find({ refUserId: { $in: userIds } });
+
+        // Map userInfo to images
+        const populatedImages = images.map(image => {
+            const userInfoForImage = userInfo.find(info => info.refUserId.equals(image.userId));
+            return { ...image.toObject(), userInfo: userInfoForImage };
+        });
         if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
@@ -51,7 +65,7 @@ const getImagesbyImageStatus = async (req, res) => {
         }
 
     } catch (err) {
-        console.error(error);
+        console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }

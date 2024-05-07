@@ -3,7 +3,7 @@ const userInfoModel = require('../models/userInfoModel')
 const { userInfoValidation } = require('../util/validate')
 const createUserInfo = async (req, res) => {
     try {
-        const { refUserId,userId, userName, mobileNumber, password } = req.body;
+        const { refUserId, userId, userName, mobileNumber, password } = req.body;
         const validationResult = await userInfoValidation(req.body);
         if (validationResult.error) {
             return res.status(400).send({
@@ -20,7 +20,7 @@ const createUserInfo = async (req, res) => {
         }
         const userInfo = new userInfoModel({
 
-            refUserId,userId, userName, mobileNumber, password,
+            refUserId, userId, userName, mobileNumber, password,
 
         })
         await userInfo.save()
@@ -34,7 +34,7 @@ const createUserInfo = async (req, res) => {
         return res.status(500).json({
             status: false,
             msg: 'Error registering user!',
-            error:error.message
+            error: error.message
         });
     }
 };
