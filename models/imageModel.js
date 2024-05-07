@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const imageSchema = new mongoose.Schema({
-    userId: {
+    userData: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "userInfo",
+        ref: "UserRegistration",
         required: true
     },
     image: {
