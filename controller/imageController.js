@@ -36,10 +36,14 @@ const uploadImage = async (req, res) => {
 const getImagesbyImageStatus = async (req, res) => {
     try {
         const imageStatus = req.params.ImageStatus;
-        const images = await imageModel.find({ imageStatus: imageStatus }).populate('userId').exec();
+        const images = await imageModel.find({  imageStatus: imageStatus })
+        // const images = await imageModel.find({ imageStatus: imageStatus }).populate({
+        //     path: 'userData',
+        //     select: 'emailId _id'
+        // }).exec();
 
 
-        // Extract userIds from images
+        // // Extract userIds from images
         // const userIds = images.map(image => image.userId);
 
         // // Populate userInfo based on userIds
