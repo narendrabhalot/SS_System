@@ -16,7 +16,7 @@ const uploadImage = async (req, res) => {
             const imageList = files[imageKey]; // Array of file objects
             for (const file of imageList) {
                 const newImage = new imageModel({
-                    userId: userId,
+                    userData: userId,
                     image: file.originalname,
                     path: geturl + file.path,
                 });
@@ -27,7 +27,7 @@ const uploadImage = async (req, res) => {
         return res.send({ msg: 'File(s) uploaded successfully', });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: 'Internal Server Error', error: error.message });
     }
 };
 
