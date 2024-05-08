@@ -63,7 +63,7 @@ const getImagesbyImageStatus = async (req, res) => {
                 status: true, msg: "image get successfully ", data: images
             })
         } else {
-            return res.status(404).send({ status: false, msg: "image not found " })
+            return res.status(400).send({ status: false, msg: "image not found " })
         }
 
     } catch (err) {
