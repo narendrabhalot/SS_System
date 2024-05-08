@@ -1,6 +1,6 @@
 const userInfoModel = require('../models/userInfoModel')
 
-const { userInfoValidation } = require('../util/validate')
+const { userInfoValidation, isValidObjectId } = require('../util/validate')
 const createUserInfo = async (req, res) => {
     try {
         const { refUserId, userId, userName, mobileNumber, password } = req.body;
@@ -51,5 +51,24 @@ const getAllUserInfo = async (req, res) => {
     }
 }
 
+const deleteUserInfoById = async (req, res) => {
+    try {
+        const userInfoId = req.params.userInfoId;
+        if (!isValidObjectId(userInfoId)) {
+            console.log('Invalid userInfoId format');
+            return res.status(400).send({ status: false, msg: "Invalid UserInfo id" });
+        }
+        const checkUserExist = await userInfoModel.findById(userInfoId);
+        if (!checkUserExist) {
+            console.log(`User not found with id: ${userInfoId}`);
+            return res.status(404).send({ status: false, msg: `User not found with id: ${userInfoId}` });
+        }
+        const deleteUser = await userInfoModel.findByIdAndDelete(userInfoId);
+        res.status(200).send({ status: true, msg: "User deleted successfully" });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).send({ status: false, msg: "Error deleting user" }); // Inform client of a general error
+    }
+};
 
-module.exports = { createUserInfo, getAllUserInfo }
+module.exports = { createUserInfo, getAllUserInfo, deleteUserInfoById }
