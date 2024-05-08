@@ -75,13 +75,15 @@ const getImagesbyIdAndImageStatus = async (req, res) => {
     try {
         const userId = req.params.userId
         const imageStatus = req.params.imageStatus
+        console.log(userId, imageStatus)
         if (!userId) {
             return res.status(400).send({ status: false, msg: "UserId required ." });
         }
         if (!isValidObjectId(userId)) {
             return res.status(404).send({ status: false, msg: "Valid userId required." });
         }
-        const images = await imageModel.find({ userId: userId, imageStatus: imageStatus })
+        const images = await imageModel.find({ userData: userId, imageStatus: imageStatus })
+        console.log("images is ", images)
         if (images.length > 0) {
             return res.send({
                 status: true, msg: "image get successfully ", data: images
