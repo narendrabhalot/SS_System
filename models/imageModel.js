@@ -16,7 +16,7 @@ const imageSchema = new mongoose.Schema({
     },
     imageStatus: {
         type: String,
-        enum: ['Pending', 'Success', 'Rejected'],
+        enum: ['Pending', 'Success', 'Rejected', 'Processing'],
         default: 'Pending'
     },
 

@@ -106,14 +106,10 @@ const updateImageById = async (req, res) => {
         if (!isValidObjectId(imageId)) { // Replace with your ID validation logic
             return res.status(400).send({ status: false, error: 'Invalid image ID format' });
         }
-
         // 2. Validate Image Status
         const updateImageStatus = req.body.imageStatus;
-
-
         // 3. Find Image Document
-
-        const validStatuses = ['Pending', 'Success', 'Rejected']// Adjust as needed
+        const validStatuses = ['Processing', 'Success', 'Rejected', 'Pending']
         if (!validStatuses.includes(updateImageStatus)) {
             return res.status(400).send({ status: false, error: 'Invalid image status' });
         }
