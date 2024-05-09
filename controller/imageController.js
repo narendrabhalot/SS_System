@@ -140,35 +140,35 @@ const updateImageById = async (req, res) => {
 
 const deleteImageById = async (req, res) => {
     try {
-      const imageId = req.params.imageId;
-  
-      if (!isValidObjectId(imageId)) {
-        return res.status(400).send({ status: false, msg: "Invalid image id" });
-      }
-  
-      const deleteUser = await imageModel.findByIdAndDelete(imageId);
-      if (!deleteUser) {
-        return res.status(404).send({ status: false, msg: `Image not found with ID: ${imageId}` });
-      }
-  
-      const imagePath = deleteUser.path;
-  
-      if (imagePath) {
-        try {
-          await fs.promises.unlink(imagePath); // Use asynchronous file deletion
-          console.log('Image file deleted successfully.');
-        } catch (err) {
-          console.error('Error deleting image file:', err);
-          // Handle specific errors (e.g., file not found, permission issues) and send appropriate error response to client
+        const imageId = req.params.imageId;
+
+        if (!isValidObjectId(imageId)) {
+            return res.status(400).send({ status: false, msg: "Invalid image id" });
         }
-      }
-  
-      return res.status(200).send({ status: true, msg: "User and associated image deleted successfully." });
+
+        const deleteUser = await imageModel.findByIdAndDelete(imageId);
+        if (!deleteUser) {
+            return res.status(404).send({ status: false, msg: `Image not found with ID: ${imageId}` });
+        }
+
+        const imagePath = deleteUser.path;
+
+        if (imagePath) {
+            try {
+                await fs.promises.unlink(imagePath); // Use asynchronous file deletion
+                console.log('Image file deleted successfully.');
+            } catch (err) {
+                console.error('Error deleting image file:', err);
+                // Handle specific errors (e.g., file not found, permission issues) and send appropriate error response to client
+            }
+        }
+
+        return res.status(200).send({ status: true, msg: "User and associated image deleted successfully." });
     } catch (error) {
-      console.error(error);
-      res.status(500).send({ status: false, msg: "Error deleting user" }); // Inform client of a general error
+        console.error(error);
+        res.status(500).send({ status: false, msg: "Error deleting user" }); // Inform client of a general error
     }
-  };
+};
 
 
 module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus, updateImageById, deleteImageById }
