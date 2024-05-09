@@ -145,17 +145,31 @@ const deleteImageById = async (req, res) => {
         if (!isValidObjectId(imageId)) {
             return res.status(400).send({ status: false, msg: "Invalid image id" });
         }
-
-        const deleteUser = await imageModel.findByIdAndDelete(imageId);
-        if (!deleteUser) {
+        const deleteImage = await imageModel.findByIdAndDelete(imageId);
+        if (!deleteImage) {
             return res.status(404).send({ status: false, msg: `Image not found with ID: ${imageId}` });
         }
+        let path = deleteImage.path
+        let deletedpath = ''
+        const urlRegex = path;
 
-        const imagePath = deleteUser.path;
+        path = path.split('/');
+        for (let i = 3; i < path.length; i++) {
 
-        if (imagePath) {
+            if (i < path.length - 1) {
+                deletedpath = deletedpath.concat(path[i])
+                deletedpath = deletedpath.concat('/')
+            } else {
+                deletedpath = deletedpath.concat(path[i])
+            }
+
+        }
+
+        console.log(deletedpath)
+
+        if (deleteImage) {
             try {
-                await fs.promises.unlink(imagePath); // Use asynchronous file deletion
+                await fs.promises.unlink(deletedpath); // Use asynchronous file deletion
                 console.log('Image file deleted successfully.');
             } catch (err) {
                 console.error('Error deleting image file:', err);

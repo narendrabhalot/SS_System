@@ -56,6 +56,9 @@ const updateUserInfo = async (req, res) => {
     try {
         const userInfoId = req.params.userInfoId;
         const updateFields = req.body
+        if (Object.keys(updateFields).length > 0) {
+            return res.status(400).send({ status: false, msg: "upadte field required" })
+        }
         if (!isValidObjectId(userInfoId)) {
             console.log('Invalid userInfoId format');
             return res.status(400).send({ status: false, msg: "Invalid UserInfo id" });
