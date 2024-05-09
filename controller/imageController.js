@@ -53,7 +53,7 @@ const getImagesbyImageStatus = async (req, res) => {
                     image: 1,
                     path: 1,
                     "userInfo.userName": 1, // Include specific fields from the userInfo array
-                    "userInfo.userId": 1
+                    "userInfo.userData": 1
                 }
             }
 
@@ -138,4 +138,20 @@ const updateImageById = async (req, res) => {
     }
 };
 
-module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus, updateImageById }
+const deleteImageById = async (req, res) => {
+    try {
+        const imageId = req.params.imageId
+        if (!isValidObjectId(imageId)) {
+            console.log('Invalid userInfoId format');
+            return res.status(400).send({ status: false, msg: "Invalid image id" });
+        }
+        const deleteUser = await imageModel.findByIdAndDelete(imageId);
+        res.status(200).send({ status: true, msg: "Image deleted successfully" });
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).send({ status: false, msg: "Error deleting user" }); // Inform client of a general error
+    }
+};
+
+
+module.exports = { uploadImage, getImagesbyImageStatus, getImagesbyIdAndImageStatus, updateImageById, deleteImageById }

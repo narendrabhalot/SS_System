@@ -1,4 +1,5 @@
 const userInfoModel = require('../models/userInfoModel')
+const userModel = require('../models/signUpModel')
 
 const { userInfoValidation, isValidObjectId } = require('../util/validate')
 const createUserInfo = async (req, res) => {
@@ -19,7 +20,6 @@ const createUserInfo = async (req, res) => {
             });
         }
         const userInfo = new userInfoModel({
-
             refUserId, userId, userName, mobileNumber, password,
 
         })
@@ -58,11 +58,12 @@ const deleteUserInfoById = async (req, res) => {
             console.log('Invalid userInfoId format');
             return res.status(400).send({ status: false, msg: "Invalid UserInfo id" });
         }
-        const checkUserExist = await userInfoModel.findById(userInfoId);
-        if (!checkUserExist) {
+        const checkUserInfoExist = await userInfoModel.findById(userInfoId);
+        if (!checkUserInfoExist) {
             console.log(`User not found with id: ${userInfoId}`);
             return res.status(404).send({ status: false, msg: `User not found with id: ${userInfoId}` });
         }
+
         const deleteUser = await userInfoModel.findByIdAndDelete(userInfoId);
         res.status(200).send({ status: true, msg: "User deleted successfully" });
     } catch (error) {
