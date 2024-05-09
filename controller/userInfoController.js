@@ -65,6 +65,7 @@ const deleteUserInfoById = async (req, res) => {
         }
 
         const deleteUser = await userInfoModel.findByIdAndDelete(userInfoId);
+        console.log(deleteUser)
         res.status(200).send({ status: true, msg: "User deleted successfully" });
     } catch (error) {
         console.error(error); // Log the error for debugging
