@@ -92,12 +92,11 @@ const getImagesbyIdAndImageStatus = async (req, res) => {
             const imagesWithIST = images.map((image) => {
                 const utcTime = moment.utc(image.updatedAt);
 
-                // Convert UTC time to IST using 'Asia/Kolkata' time zone identifier
+
                 const istTime = utcTime.tz('Asia/Kolkata');
 
                 // Format the IST time (optional)
                 const formattedISTTime = istTime.format('YYYY-MM-DD HH:mm:ss.SSS Z h:mm A');
-
                 // Use toJSON for cleaner response (if using Mongoose models)
                 if (image.toJSON) {
                     const sanitizedImage = image.toJSON();
@@ -211,10 +210,10 @@ const deleteImageById = async (req, res) => {
 
         if (deleteImage) {
             try {
-                await fs.promises.unlink(deletedpath); // Use asynchronous file deletion
+                await fs.unlink(deletedpath); // Use asynchronous file deletion
                 console.log('Image file deleted successfully.');
             } catch (err) {
-                console.error('Error deleting image file:', err);
+                console.log('Error deleting image file:', err);
                 // Handle specific errors (e.g., file not found, permission issues) and send appropriate error response to client
             }
         }
