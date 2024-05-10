@@ -5,7 +5,6 @@ const express = require("express");
 const router = express.Router()
 const { createUser, userLogin, updateUser, getUsers } = require('../controller/userController')
 const { forgetPassword, verifyOTP } = require('../controller/forgetPasswordController')
-
 const { uploadImage, getImagesbyIdAndImageStatus, getImagesbyImageStatus, updateImageById, deleteImageById } = require('../controller/imageController')
 const { customMulterImageUpload } = require('../middlewere/uploadImage')
 const { createUserInfo, getAllUserInfo, deleteUserInfoById, updateUserInfo } = require('../controller/userInfoController')
