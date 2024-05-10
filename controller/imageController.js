@@ -199,7 +199,7 @@ const deleteImageById = async (req, res) => {
 
             if (i < path.length - 1) {
                 deletedpath = deletedpath.concat(path[i])
-                deletedpath = deletedpath.concat('/')
+                deletedpath = deletedpath + '\\'
             } else {
                 deletedpath = deletedpath.concat(path[i])
             }
