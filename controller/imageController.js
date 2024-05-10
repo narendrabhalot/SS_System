@@ -1,4 +1,4 @@
-
+const moment = require('moment-timezone');
 const path = require('path'); // Import path for file path manipulation
 const { isValidObjectId } = require('../util/validate')
 const fs = require('fs').promises; // Import fs.promises for asynchronous file operations (optional)
@@ -65,41 +65,75 @@ const getImagesbyImageStatus = async (req, res) => {
         } else {
             return res.status(400).send({ status: false, msg: "image not found " })
         }
-
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 }
+
 const getImagesbyIdAndImageStatus = async (req, res) => {
     try {
-        const userId = req.params.userId
-        const imageStatus = req.params.imageStatus
-        console.log(userId, imageStatus)
+        const userId = req.params.userId;
+        const imageStatus = req.params.imageStatus;
+        console.log(userId, imageStatus);
+
         if (!userId) {
             return res.status(400).send({ status: false, msg: "UserId required ." });
         }
+
         if (!isValidObjectId(userId)) {
             return res.status(404).send({ status: false, msg: "Valid userId required." });
         }
-        const images = await imageModel.find({ userData: userId, imageStatus: imageStatus })
-        console.log("images is ", images)
-        if (images.length > 0) {
-            return res.send({
-                status: true, msg: "image get successfully ", data: images
-            })
-        } else {
-            return res.status(404).send({ status: false, msg: "image not found " })
-        }
 
+        const images = await imageModel.find({ userData: userId, imageStatus: imageStatus });
+        console.log("images is ", images);
+
+        if (images.length > 0) {
+            const imagesWithIST = images.map((image) => {
+                const utcTime = moment.utc(image.updatedAt);
+
+                // Convert UTC time to IST using 'Asia/Kolkata' time zone identifier
+                const istTime = utcTime.tz('Asia/Kolkata');
+
+                // Format the IST time (optional)
+                const formattedISTTime = istTime.format('YYYY-MM-DD HH:mm:ss.SSS Z h:mm A');
+
+                // Use toJSON for cleaner response (if using Mongoose models)
+                if (image.toJSON) {
+                    const sanitizedImage = image.toJSON();
+                    sanitizedImage.istUpdatedAt = formattedISTTime
+                    return sanitizedImage;
+                } else {
+                    // Manual transformation (if not using Mongoose models)
+                    return {
+                        _id: image._id,
+                        userData: image.userData,
+                        image: image.image,
+                        path: image.path,
+                        imageStatus: image.imageStatus,
+                        createdAt: image.createdAt,
+                        updatedAt: image.updatedAt,
+                        istUpdatedAt: formattedISTTime
+                    };
+                }
+            });
+
+            return res.send({
+                status: true,
+                msg: "Images retrieved successfully",
+                data: imagesWithIST,
+            });
+        } else {
+            return res.status(404).send({ status: false, msg: "Images not found" });
+        }
     } catch (err) {
-        console.error(error);
+        console.error(err);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+};
 
 
-
-}
+// const moment = require('moment-timezone'); // Install with npm install moment-timezone
 
 const updateImageById = async (req, res) => {
     try {
@@ -108,22 +142,26 @@ const updateImageById = async (req, res) => {
         if (!isValidObjectId(imageId)) { // Replace with your ID validation logic
             return res.status(400).send({ status: false, error: 'Invalid image ID format' });
         }
+
         // 2. Validate Image Status
         const updateImageStatus = req.body.imageStatus;
-        // 3. Find Image Document
-        const validStatuses = ['Processing', 'Success', 'Reject', 'Pending']
+        const validStatuses = ['Processing', 'Success', 'Reject', 'Pending'];
         if (!validStatuses.includes(updateImageStatus)) {
             return res.status(400).send({ status: false, error: 'Invalid image status' });
         }
-        const getImage = await imageModel.findById(imageId);
-        if (!getImage) {
+        // 3. Find Image Document
+        const imageDoc = await imageModel.findById(imageId);
+        if (!imageDoc) {
             return res.status(404).send({ status: false, error: 'Image not found' });
         }
-        // 4. Update Image with Validation
         const updatedImage = await imageModel.findByIdAndUpdate(
             imageId,
-            { $set: { imageStatus: updateImageStatus } },
-            { new: true, runValidators: true } // Ensure validation during update
+            {
+                $set: {
+                    imageStatus: updateImageStatus,
+                },
+            },
+            { new: true, runValidators: true }
         );
 
         if (!updatedImage) {
@@ -131,9 +169,13 @@ const updateImageById = async (req, res) => {
             return res.status(500).send({ status: false, error: 'Failed to update image' });
         }
 
-        return res.status(200).send({ status: true, msg: "Image updated successfully" });
+        return res.status(200).send({
+            status: true,
+            msg: "Image updated successfully",
+
+        });
     } catch (error) {
-        console.error('Error updating image:', error); // Log the error for debugging
+        console.error('Error updating image:', error);
         return res.status(500).send({ status: false, error: 'Internal server error', error: error.message });
     }
 };
