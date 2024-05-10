@@ -167,7 +167,6 @@ const updateImageById = async (req, res) => {
             // Handle potential validation errors or other update failures
             return res.status(500).send({ status: false, error: 'Failed to update image' });
         }
-
         return res.status(200).send({
             status: true,
             msg: "Image updated successfully",
@@ -190,22 +189,22 @@ const deleteImageById = async (req, res) => {
         if (!deleteImage) {
             return res.status(404).send({ status: false, msg: `Image not found with ID: ${imageId}` });
         }
-        let path = deleteImage.path
-        let deletedpath = ''
-        const urlRegex = path;
+        let deletedpath = "uploads";
+        let url = deleteImage.path
+        console.log("url is", url)
 
-        path = path.split('/');
-        for (let i = 3; i < path.length; i++) {
+        const pathSegments = url.split('/');
+        console.log(pathSegments)
+        const filename = pathSegments.pop(); // Extract the filename
+        console.log(filename)
 
-            if (i < path.length - 1) {
-                deletedpath = deletedpath.concat(path[i])
-                deletedpath = deletedpath + '\\'
-            } else {
-                deletedpath = deletedpath.concat(path[i])
-            }
+        deletedpath = path.join(deletedpath, filename);
 
-        }
+        // data = data.split('/');
+        // for (let i = 3; i < path.length; i++) {
+        //     deletedpath = path.join(deletedpath, path[i])
 
+        // }
         console.log(deletedpath)
 
         if (deleteImage) {

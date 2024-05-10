@@ -38,5 +38,4 @@ const adminLogin = async (req, res) => {
         return res.status(500).send({ status: false, msg: "Error logging in" });
     }
 };
-
 module.exports = { creatAdmin, adminLogin }

@@ -27,9 +27,9 @@ const forgetPassword = async (req, res) => {
         }
         let otp = generateOTP();
         existingUser.otp = otp
-        otp = `ss system otp : ${otp}`
+
         await existingUser.save();
-        await sendEmail(emailId, "otp", otp);
+        await sendEmail(emailId, "Your OTP for SS System", otp);
         // 4. Send Successful Response with User Data
         return res.status(200).send({
             status: true,

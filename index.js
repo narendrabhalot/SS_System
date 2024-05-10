@@ -7,7 +7,6 @@ const mongoose = require("mongoose");
 const cors = require('cors')
 require('dotenv').config();
 const dbConnectionString = process.env.DB_CONNECTION_STRING;
-
 const app = express();
 const route = require("./routes/route");
 app.use(bodyParser.json());
