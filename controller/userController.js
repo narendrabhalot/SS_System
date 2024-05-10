@@ -77,7 +77,6 @@ const getUsers = async (req, res) => {
         return res.status(500).send({ status: false, msg: "server error during thegetting user ", error: error.message })
     }
 }
-
 const updateUser = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -105,5 +104,4 @@ const updateUser = async (req, res) => {
         return res.status(500).send({ status: false, msg: "Internal server error" });
     }
 };
-
 module.exports = { createUser, userLogin, updateUser, getUsers }
