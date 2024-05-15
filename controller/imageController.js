@@ -5,7 +5,7 @@ const fs = require('fs').promises; // Import fs.promises for asynchronous file o
 const imageModel = require('../models/imageModel');
 const userInfoModel = require('../models/userInfoModel');
 const uploadImage = async (req, res) => {
-    let geturl = "https://ss-system-g6qb.onrender.com/"
+    let geturl = "https://ss-system-g6qb.onrender.com"
     try {
         if (!req.files || Object.keys(req.files).length === 0) {
             return res.status(400).json({ error: 'Please select a file!' });
@@ -18,7 +18,7 @@ const uploadImage = async (req, res) => {
                 const newImage = new imageModel({
                     userData: userId,
                     image: file.originalname,
-                    path: geturl + file.path,
+                    path: path.join(geturl, file.path)
                 });
                 await newImage.save();
             }
@@ -181,7 +181,6 @@ const updateImageById = async (req, res) => {
 const deleteImageById = async (req, res) => {
     try {
         const imageId = req.params.imageId;
-
         if (!isValidObjectId(imageId)) {
             return res.status(400).send({ status: false, msg: "Invalid image id" });
         }

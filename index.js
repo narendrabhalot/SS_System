@@ -12,14 +12,14 @@ const route = require("./routes/route");
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cors({
     origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true
 }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-console.log("this is the file ", path.join(__dirname, 'uploads'));
+console.log(path.join(__dirname, 'uploads'))
+console.log("this is the file ", path.join(__dirname, 'uploads', 'avatar.jpg'));
 app.use("/", route);
 mongoose.connect(dbConnectionString, {
     useUnifiedTopology: true,
